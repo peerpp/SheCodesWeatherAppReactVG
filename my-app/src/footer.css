@@ -1,0 +1,11 @@
+footer {
+  background-color: #00334e;
+  border-radius: 8px;
+  color: #f6f5f5;
+  font-family: "Julius Sans One", sans-serif;
+  font-size: 10px;
+  opacity: 0.8;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+}
