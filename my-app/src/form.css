@@ -18,7 +18,3 @@ input {
 input::placeholder {
   color: #00334e;
 }
-
-.descriptionWeather {
-  text-transform: capitalize;
-}

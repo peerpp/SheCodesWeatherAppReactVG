@@ -61,3 +61,7 @@ a.disabled {
 a.disabled1 {
   color: #c75f2c;
 }
+
+.descriptionWeather {
+  text-transform: capitalize;
+}

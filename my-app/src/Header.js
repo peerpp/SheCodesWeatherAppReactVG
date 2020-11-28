@@ -5,51 +5,80 @@ import axios from "axios";
 
 const apiKey = "71f57c13bbcc4d290991410e3cd840b3";
 
-export default function Header() {
+export default function Header(props) {
+  const [gpsLoaded, setGpsLoaded] = useState(false);
   const [gpsLocation, setGpsLocation] = useState(false);
   const [gpsError, setGpsError] = useState(false);
-  const [gpsAndDataLoaded, setGpsAndDataLoaded] = useState(false);
-  const [headerWeather, setHeaderWeather] = useState(false);
+  const [weatherLoaded, setWeatherLoaded] = useState(false);
+  const [weather, setWeather] = useState(false);
+
+  function converterCtoF(celsius) {
+    return Math.round((celsius * 9) / 5 + 32);
+  }
+
+  function converterFtoC(fahrenheit) {
+    return Math.round(((fahrenheit - 32) * 5) / 9);
+  }
+
+  function setFahrenheit(event) {
+    event.preventDefault();
+    setWeather({ ...weather, temperature: converterCtoF(weather.temperature) });
+
+    let fahrenheitLink = document.querySelector(".fahrenheit");
+    let celsiusLink = document.querySelector(".celsius");
+    fahrenheitLink.classList.add("disabled");
+    celsiusLink.classList.remove("disabled");
+  }
+
+  function setCelsius(event) {
+    event.preventDefault();
+    setWeather({ ...weather, temperature: converterFtoC(weather.temperature) });
+
+    let fahrenheitLink = document.querySelector(".fahrenheit");
+    let celsiusLink = document.querySelector(".celsius");
+    fahrenheitLink.classList.remove("disabled");
+    celsiusLink.classList.add("disabled");
+  }
 
   function temperatureSingapore(response) {
-    setGpsAndDataLoaded(true);
-    setHeaderWeather({
+    setWeather({
       temperature: Math.round(response.data.main.temp),
       description: response.data.weather[0].description,
       humidity: response.data.main.humidity,
       icon: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`,
       wind: Math.round(response.data.wind.speed),
-      userLocation: response.data.name
-    })
-    /*let temperatureElementSin = document.querySelector(".temperatureSingapore");
-    let descriptionElementSin = document.querySelector("#descriptionSingapore");
-    let humidityElementSin = document.querySelector("#humiditySingapore");
-    let iconElementSin = document.querySelector("#iconSingapore");
-    let windElementSin = document.querySelector("#windSingapore");
-    let userLocationElement = document.querySelector("#userLocation");
+      userLocation: response.data.name,
+    });
+  }
 
-    temperatureElementSin.innerHTML = Math.round(response.data.main.temp);
-    descriptionElementSin.innerHTML = response.data.weather[0].description;
-    humidityElementSin.innerHTML = response.data.main.humidity;
-    iconElementSin.setAttribute(
-      "src",
-      `https://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`
-    );
-    iconElementSin.setAttribute("alt", response.data.weather[0].description);
-    windElementSin.innerHTML = Math.round(response.data.wind.speed);
-    userLocationElement.innerHTML = response.data.name;*/
+  function loadWeather() {
+    if (gpsLocation) {
+      let apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${gpsLocation.latitude}&lon=${gpsLocation.longitude}&appid=${apiKey}`;
+      axios.get(apiUrl).then(temperatureSingapore);
+      setWeatherLoaded(true);
+    } else if (gpsError) {
+      let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=Singapore&units=metric&appid=${apiKey}`;
+      axios.get(apiUrl).then(temperatureSingapore);
+      setWeatherLoaded(true);
+    }
   }
 
   function handlePosition(position) {
-console.log("handlePos", gpsError, gpsLocation, gpsAndDataLoaded);
     setGpsLocation(position.coords);
   }
 
   function handleError() {
     setGpsError(true);
   }
- 
-  if (gpsAndDataLoaded) {
+
+  if (gpsLoaded) {
+    if (!weatherLoaded) loadWeather();
+  } else {
+    navigator.geolocation.getCurrentPosition(handlePosition, handleError);
+    setGpsLoaded(true);
+  }
+
+  if (weatherLoaded) {
     return (
       <div className="Header">
         <h3>
@@ -59,47 +88,43 @@ console.log("handlePos", gpsError, gpsLocation, gpsAndDataLoaded);
 
         <div className="row temperature">
           <div className="col-7 locationCurrent">
-            <div id="userLocation">{headerWeather.userLocation}</div>
-            <span className="temperatureSingapore">{headerWeather.temperature}</span>
-            <a href=" " className="celsius disabled">
+            <div>{weather.userLocation}</div>
+            <span>{weather.temperature} </span>
+            <a href=" " className="celsius disabled" onClick={setCelsius}>
               °C
             </a>{" "}
-            |
-            <a href=" " className="fahrenheit disabled1">
+            |{" "}
+            <a
+              href=" "
+              className="fahrenheit disabled1"
+              onClick={setFahrenheit}
+            >
               °F
             </a>
-            <img id="iconSingapore" src={headerWeather.icon} alt={headerWeather.description} />
-            <span className="descriptionWeather" id="descriptionSingapore">{headerWeather.description}</span>
+            <img
+              id="iconSingapore"
+              src={weather.icon}
+              alt={weather.description}
+            />
+            <span className="descriptionWeather">{weather.description}</span>
           </div>
           <div className="col-5 rightLocation">
-            <div className="timeSingapore">{headerWeather.wind}</div>
-            Wind:
-            <span id="windSingapore">{headerWeather.wind}</span> km/h &mdash; Humidity:
-            <span id="humiditySingapore">{headerWeather.humidity}</span>%
+            <div>{props.time}</div>
+            Wind: {weather.wind} km/h &mdash; Humidity: {weather.humidity}%
           </div>
         </div>
-
+        <br />
         <Form />
       </div>
-    )
+    );
   } else {
-    if (gpsError) {
-      let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=Singapore&units=metric`;
-      axios
-        .get(`${apiUrl}&appid=${apiKey}`)
-        .then(temperatureSingapore);
-    } else if (gpsLocation) {
-console.log("loading data", gpsError, gpsLocation, gpsAndDataLoaded)
-      let apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric`;
-      axios
-        .get(`${apiUrl}&lat=${gpsLocation.latitude}&lon=${gpsLocation.longitude}&appid=${apiKey}`)
-        .then(temperatureSingapore);
-    } else {
-console.log("loading gps", gpsError, gpsLocation, gpsAndDataLoaded)
-      navigator.geolocation.getCurrentPosition(handlePosition, handleError);
-    }
-
-    return null
-      // render page zonder Wind: Humidty: en zo
+    return (
+      <div className="Header">
+        <h3>
+          <span className="holiday">WeatherApp</span> For Your
+          <span className="holiday"> Holiday</span> Destination
+        </h3>
+      </div>
+    );
   }
 }

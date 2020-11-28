@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
 
 import "./flipcard.css";
 
-export default function Flipcard() {
+export default function Flipcard(props) {
   return (
     <div className="flip-card" id="flipCard1">
       <div className="flip-card-inner">
@@ -27,7 +26,7 @@ export default function Flipcard() {
                   <div className="col-9">
                     <span className="temperatureFront"></span>
                     <span className="descriptionWeather descriptionCard">
-                      Looking for a city-trip! Tokyo? Paris? Shanghai?
+                      {props.intro}
                     </span>
                     <br />
 
