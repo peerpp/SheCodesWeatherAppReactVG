@@ -1,5 +1,4 @@
 import React from "react";
-
 import "./form.css";
 
 export default function Form() {
@@ -13,5 +12,5 @@ export default function Form() {
       />
       <input type="submit" value="Go!" />
     </form>
-  );
+  )
 }
