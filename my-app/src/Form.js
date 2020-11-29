@@ -1,16 +1,18 @@
 import React from "react";
 import "./form.css";
 
-export default function Form() {
+export default function Form(props) {
   return (
-    <form className="formDestination">
+    <form className="formDestination" onSubmit={props.onSubmit}>
       <input
         id="inputDestination"
         type="search"
         placeholder="What's your next trip?"
-        autocomplete="off"
+        autoComplete="off"
+        value={props.formInput}
+        onChange={props.formInputChange}
       />
       <input type="submit" value="Go!" />
     </form>
-  )
+  );
 }

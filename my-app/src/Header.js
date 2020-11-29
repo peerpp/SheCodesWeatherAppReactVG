@@ -114,7 +114,11 @@ export default function Header(props) {
           </div>
         </div>
         <br />
-        <Form />
+        <Form
+          formInput={props.formInput}
+          formInputChange={props.formInputChange}
+          onSubmit={props.onSubmit}
+        />
       </div>
     );
   } else {
