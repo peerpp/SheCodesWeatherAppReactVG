@@ -159,7 +159,10 @@ export default function Flipcard(props) {
         <div className="flip-card-back">
           <div className="card card-forecastdays">
             <div className="card-body">
-              <i className="far fa-window-close closeCard"></i>
+              <i
+                className="far fa-window-close closeCard"
+                onClick={props.onClick}
+              ></i>
               <h5 className="card-title">{inputLocation}</h5>
 
               <div className="container">

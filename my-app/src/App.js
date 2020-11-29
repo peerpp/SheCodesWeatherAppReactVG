@@ -70,15 +70,22 @@ export default function App() {
     return `${day} ${month} ${numDay}`;
   }
 
-  async function displayCity(event) {
-    event.preventDefault();
+  function formInputChange(event) {
+    setFormInput(event.target.value);
+  }
 
+  function displayCity(event) {
+    event.preventDefault();
+    loadData(event).catch((err) => setFormInput("Not found!"));
+  }
+
+  async function loadData(event) {
+    // front
     let inputLocation = event.target[0].value;
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${inputLocation}&units=metric&appid=${apiKey}`;
-    let response1 = await axios
-      .get(apiUrl)
-      .catch((err) => setFormInput("Not found!"));
+    let response1 = await axios.get(apiUrl);
 
+    // back
     let latitude = response1.data.coord.lat;
     let longitude = response1.data.coord.lon;
     apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
@@ -87,36 +94,13 @@ export default function App() {
     showTemperature(response1, response2);
   }
 
-  /*
-  function displayCity2(event) {
-    event.preventDefault();
-    let inputLocation = event.target[0].value;
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${inputLocation}&units=metric&appid=${apiKey}`;
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        showTemperature(response);
-        return response;
-      })
-      .then((response) => getForecast3days(response))
-      .catch((err) => {
-        console.log(err);
-        setFormInput("Not found!");
-      });
-  }
-*/
-
-  function formInputChange(event) {
-    setFormInput(event.target.value);
-  }
-
   function showTemperature(response1, response2) {
     setFlipCards({
       flipCard4: flipCards.flipCard3,
       flipCard3: flipCards.flipCard2,
       flipCard2: flipCards.flipCard1,
       flipCard1: {
-        // front
+        // front (response1)
         temperature: Math.round(response1.data.main.temp),
         description: response1.data.weather[0].description,
         humidity: response1.data.main.humidity,
@@ -130,7 +114,7 @@ export default function App() {
         icon: response1.data.weather[0].icon,
         flip: false,
 
-        // back
+        // back (response2)
         day1: formatShortDate(new Date(response2.data.daily[1].dt * 1000)),
         day2: formatShortDate(new Date(response2.data.daily[2].dt * 1000)),
         day3: formatShortDate(new Date(response2.data.daily[3].dt * 1000)),
@@ -152,7 +136,7 @@ export default function App() {
 
   function flipCardClick(flipCardId) {
     let copy = Object.assign({}, flipCards);
-    copy[flipCardId].flip = true;
+    copy[flipCardId].flip = !copy[flipCardId].flip;
     setFlipCards(copy);
   }
 
