@@ -48,6 +48,10 @@
   width: 18rem;
 }
 
+.descriptionWeather {
+  text-transform: capitalize;
+}
+
 /*button*/
 
 .btn-forecast {
