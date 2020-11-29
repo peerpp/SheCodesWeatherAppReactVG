@@ -159,10 +159,7 @@ export default function Flipcard(props) {
         <div className="flip-card-back">
           <div className="card card-forecastdays">
             <div className="card-body">
-              <i
-                className="far fa-window-close closeCard"
-                onClick={props.onClick}
-              ></i>
+              <i className="far fa-window-close" onClick={props.onClick}></i>
               <h5 className="card-title">{inputLocation}</h5>
 
               <div className="container">
@@ -173,35 +170,23 @@ export default function Flipcard(props) {
                 </div>
                 <br />
                 <div className="row">
-                  <div className="col-3 forecastCard day1">{day1}</div>
+                  <div className="col-3 forecastCard">{day1}</div>
                   <div className="col-3">{icon1}</div>
-                  <div className="col-3 dayTemperature">
-                    <span className="temp1">{temp1}</span>°C
-                  </div>
-                  <div className="col-3 feelsLikeCold">
-                    <span className="feels1">{feels1}</span>°C
-                  </div>
+                  <div className="col-3 dayTemperature">{temp1}°C</div>
+                  <div className="col-3 feelsLikeCold">{feels1}°C</div>
                 </div>
 
                 <div className="row">
-                  <div className="col-3 forecastCard day2">{day2}</div>
+                  <div className="col-3 forecastCard">{day2}</div>
                   <div className="col-3">{icon2}</div>
-                  <div className="col-3 dayTemperature">
-                    <span className="temp2">{temp2}</span>°C
-                  </div>
-                  <div className="col-3 feelsLikeCold">
-                    <span className="feels2">{feels2}</span>°C
-                  </div>
+                  <div className="col-3 dayTemperature">{temp2}°C</div>
+                  <div className="col-3 feelsLikeCold">{feels2}°C</div>
                 </div>
                 <div className="row">
-                  <div className="col-3 forecastCard day3">{day3}</div>
+                  <div className="col-3 forecastCard">{day3}</div>
                   <div className="col-3">{icon3} </div>
-                  <div className="col-3 dayTemperature">
-                    <span className="temp3">{temp3}</span>°C
-                  </div>
-                  <div className="col-3 feelsLikeCold">
-                    <span className="feels3">{feels3}</span>°C
-                  </div>
+                  <div className="col-3 dayTemperature">{temp3}°C</div>
+                  <div className="col-3 feelsLikeCold">{feels3}°C</div>
                 </div>
               </div>
               <div className="timeCard">{time}</div>
