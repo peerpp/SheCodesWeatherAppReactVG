@@ -80,12 +80,12 @@ export default function App() {
   }
 
   async function loadData(event) {
-    // front
+    // front flipcard
     let inputLocation = event.target[0].value;
     let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${inputLocation}&units=metric&appid=${apiKey}`;
     let response1 = await axios.get(apiUrl);
 
-    // back
+    // back flipcard
     let latitude = response1.data.coord.lat;
     let longitude = response1.data.coord.lon;
     apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
